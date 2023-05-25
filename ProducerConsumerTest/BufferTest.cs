@@ -15,11 +15,11 @@ namespace ProducerConsumerTests
         [Test]
         public void IsEmptyTest()
         {
-            Assert.IsTrue(buffer.IsEmpty);
+            Assert.That(buffer.IsEmpty, Is.True);
             buffer.Push("hello");
-            Assert.IsFalse(buffer.IsEmpty);
+            Assert.That(buffer.IsEmpty, Is.False);
             buffer.Pop();
-            Assert.IsTrue(buffer.IsEmpty);
+            Assert.That(buffer.IsEmpty, Is.True);
         }
 
         [Test]
@@ -28,12 +28,12 @@ namespace ProducerConsumerTests
             buffer.Push("first");
             buffer.Push("second");
             var first = buffer.Pop();
-            Assert.AreEqual("first", first);
+            Assert.That(first, Is.EqualTo("first"));
             buffer.Push("third");
             var second = buffer.Pop();
             var third = buffer.Pop();
-            Assert.AreEqual("second", second);
-            Assert.AreEqual("third", third);
+            Assert.That(second, Is.EqualTo("second"));
+            Assert.That(third, Is.EqualTo("third"));
         }
     }
 }
