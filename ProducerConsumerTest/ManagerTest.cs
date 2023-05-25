@@ -27,6 +27,7 @@
         {
             producersCounter = 0;
             consumersCounter = 0;
+            acc = 0;
 
             manager = new Manager<int>(2, 2, Produce, Consume);
         }
@@ -39,6 +40,26 @@
             manager.Dispose();
 
             Assert.That(acc, Is.EqualTo(30));
+        }
+
+        [Test]
+        public void DoubleStartAndDisposeTest()
+        {
+            manager.Start();
+            manager.Start();
+            manager.Dispose();
+            manager.Dispose();
+
+            Assert.Pass();
+        }
+
+        [Test]
+        public void StartAfterDisposeTest()
+        {
+            manager.Start();
+            manager.Dispose();
+
+            Assert.Catch<InvalidOperationException>(() => manager.Start());
         }
     }
 }
