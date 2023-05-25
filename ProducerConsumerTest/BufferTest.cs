@@ -1,5 +1,3 @@
-using ProducerConsumer;
-
 namespace ProducerConsumerTests
 {
     public class BufferTests
