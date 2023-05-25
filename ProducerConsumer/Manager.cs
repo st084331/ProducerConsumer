@@ -2,11 +2,14 @@
 
 public class Manager<T> : IDisposable
 {
-    private Mutex mutex = new();
-    private Buffer<T> buffer = new();
-    private List<Producer<T>> producers;
-    private List<Consumer<T>> consumers;
-    private List<Thread> threads;
+    private readonly Mutex mutex = new();
+    private readonly Buffer<T> buffer = new();
+    private readonly List<Producer<T>> producers;
+    private readonly List<Consumer<T>> consumers;
+    private readonly List<Thread> threads;
+
+    private volatile bool disposed;
+    private volatile bool running;
 
     public Manager(int producersCount, int consumersCount, Func<T> produceFunc, Action<T> consumeAction)
     {
@@ -25,21 +28,28 @@ public class Manager<T> : IDisposable
 
     public void Start()
     {
+        if (disposed)
+        {
+            throw new InvalidOperationException(
+                "Error starting threads, because the manager was destroyed"
+            );
+        }
+
+        if (running) return;
+
+        running = true;
+
         threads.ForEach(thread => thread.Start());
     }
-
-    public void Stop()
+    public void Dispose()
     {
+        if (disposed) return;
+
+        disposed = true;
+        running = false;
+
         producers.ForEach(producer => producer.Stop());
         consumers.ForEach(consumer => consumer.Stop());
         threads.ForEach(thread => thread.Join());
-    }
-
-    public void Dispose()
-    {
-        producers.Clear();
-        consumers.Clear();
-        threads.Clear();
-        mutex.Dispose();
     }
 }

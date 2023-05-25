@@ -30,9 +30,7 @@ internal class Program
 
         Console.ReadKey(true);
 
-        manager.Stop();
-        Console.WriteLine("Manager stopped");
-
         manager.Dispose();
+        Console.WriteLine("Manager stopped");
     }
 }
