@@ -2,13 +2,12 @@
 
 internal class Program
 {
-    private static int ProduceFunc()
+    private static void ProduceFunc()
     {
         int item = new Random().Next(100);
         Console.WriteLine($"Produced {item} on {Thread.CurrentThread.ManagedThreadId}");
         // work emulation
         Thread.Sleep(100);
-        return 0;
     }
 
     private static void ConsumeAction(int item)
